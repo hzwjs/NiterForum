@@ -882,7 +882,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
         ,bgcolor: '#009688'
         ,click: function(type){
             if(type === 'bar1'){
-                //layer.msg('打开 index.js，开启发表新帖的路径');
+                //layer.msg('打开 index.js，开启发布新项目的路径');
                 location.href = '#talk_panel';
             }
         }

@@ -1,36 +1,54 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <ul th:fragment="user" class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
-    <li class="layui-nav-item">
-        <a th:href="${'/user/'+loginUser.id}" target="_blank">
-            <i class="layui-icon">&#xe609;</i>
-            我的主页
-        </a>
-    </li>
-    <li th:class="${section=='account'}?'layui-nav-item layui-this':'layui-nav-item'">
-        <a href="/user/set/account">
-            <i class="layui-icon">&#xe612;</i>
-            账户中心
-        </a>
-    </li>
-    <li th:class="${section=='message'}?'layui-nav-item layui-this':'layui-nav-item'" >
-        <a href="/user/message">
-            <i class="layui-icon">&#xe611;</i>
-            我的消息
-        </a>
-    </li>
-    <li th:class="${section=='myPosts'||section=='likes'}?'layui-nav-item layui-this':'layui-nav-item'">
-        <a href="/user/p/myPosts">
-            <i class="layui-icon">&#xe62a;</i>
-            帖子管理
-        </a>
-    </li>
-    <li th:class="${section=='info'||section=='avatar'}?'layui-nav-item layui-this':'layui-nav-item'">
-        <a href="/user/set/info">
-            <i class="layui-icon">&#xe620;</i>
-            基本设置
-        </a>
-    </li>
+    <th:block th:if="${loginUser.groupId!=21}">
+        <li class="layui-nav-item">
+            <a th:href="${'/user/'+loginUser.id}" target="_blank">
+                <i class="layui-icon">&#xe609;</i>
+                我的主页
+            </a>
+        </li>
+        <li th:class="${section=='account'}?'layui-nav-item layui-this':'layui-nav-item'">
+            <a href="/user/set/account">
+                <i class="layui-icon">&#xe612;</i>
+                账户中心
+            </a>
+        </li>
+        <li th:class="${section=='message'}?'layui-nav-item layui-this':'layui-nav-item'" >
+            <a href="/user/message">
+                <i class="layui-icon">&#xe611;</i>
+                我的消息
+            </a>
+        </li>
+        <li th:class="${section=='myPosts'||section=='likes'}?'layui-nav-item layui-this':'layui-nav-item'">
+            <a href="/user/p/myPosts">
+                <i class="layui-icon">&#xe62a;</i>
+                帖子管理
+            </a>
+        </li>
+        <li th:class="${section=='info'||section=='avatar'}?'layui-nav-item layui-this':'layui-nav-item'">
+            <a href="/user/set/info">
+                <i class="layui-icon">&#xe620;</i>
+                基本设置
+            </a>
+        </li>
+    </th:block>
+
+    <th:block th:if="${loginUser.groupId==21}">
+        <li th:class="${section=='myPosts'||section=='likes'}?'layui-nav-item layui-this':'layui-nav-item'">
+            <a href="/user/p/myPosts">
+                <i class="layui-icon">&#xe62a;</i>
+                帖子管理
+            </a>
+        </li>
+        <li th:class="${section=='info'||section=='avatar'}?'layui-nav-item layui-this':'layui-nav-item'">
+            <a href="/user/p/myPosts">
+                <i class="layui-icon">&#xe62a;</i>
+                注册审核
+            </a>
+        </li>
+    </th:block>
+
     <li class="layui-nav-item">
         <a href="/logout">
             <i class="layui-icon">&#x1006;</i>
@@ -50,9 +68,6 @@
                th:text="${tag}" class="community-tag"></a>
         </div>
     </div>
-
-
-
 
     <div class="fly-panel fly-rank fly-rank-reply" id="LAY_replyRank">
         <h3 class="fly-panel-title">最近访客</h3>
@@ -169,15 +184,15 @@
         </div>
     </div>
 
-    <div class="fly-panel" style="">
-        <div class="fly-panel-title">
-            点击图片或者QQ扫码加入社区官方交流群
-        </div>
-        <div class="fly-panel-main">
-            <a th:href="${@environment.getProperty('site.info.contactQunUrl')}" target="_blank">
-                <img src="/images/qunQrcode.jpg" style="max-width: 100%;" alt="layui"></a>
-        </div>
-    </div>
+<!--    <div class="fly-panel" style="">-->
+<!--        <div class="fly-panel-title">-->
+<!--            点击图片或者QQ扫码加入社区官方交流群-->
+<!--        </div>-->
+<!--        <div class="fly-panel-main">-->
+<!--            <a th:href="${@environment.getProperty('site.info.contactQunUrl')}" target="_blank">-->
+<!--                <img src="/images/qunQrcode.jpg" style="max-width: 100%;" alt="layui"></a>-->
+<!--        </div>-->
+<!--    </div>-->
 
     <div class="fly-panel fly-link">
         <h3 class="fly-panel-title">友情链接</h3>

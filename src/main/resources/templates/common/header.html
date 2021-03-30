@@ -35,7 +35,7 @@
     </a>
     <ul class="layui-nav layui-hide-lg layui-hide-md" style="margin-left: 60px">
       <li th:class="${'communitynav' == navtype}? 'layui-nav-item layui-this' : 'layui-nav-item'">
-        <a href="/forum"><i class="layui-icon">&#xe68e;</i>主页</a>
+        <a href="/forum"><i class="layui-icon">&#xe68e;</i>项目广场</a>
       </li>
       <li class="layui-nav-item">
         <a></a>
@@ -54,7 +54,7 @@
 
     <ul class="layui-nav fly-nav layui-hide-xs">
       <li th:class="${'communitynav' == navtype}? 'layui-nav-item layui-this' : 'layui-nav-item'">
-        <a href="/forum"><i class="layui-icon">&#xe68e;</i>主页</a>
+        <a href="/forum"><i class="layui-icon">&#xe68e;</i>项目广场</a>
       </li>
       <!--li th:class="${'devnav' == navtype}? 'layui-nav-item layui-this' : 'layui-nav-item'">
         <a href="/dev"><i class="iconfont icon-iconmingxinganli"></i>实验室</a>
@@ -65,21 +65,7 @@
       <li th:class="${'newsnav' == navtype}? 'layui-nav-item layui-this' : 'layui-nav-item'">
         <a href="/news"><i class="layui-icon">&#xe705;</i>看看</a>
       </li>
-      <!--li th:class="${'chatnav' == navtype}? 'layui-nav-item layui-this' : 'layui-nav-item'">
-        <a href="/chat"><i class="iconfont icon-jiaoliu"></i>留言</a>
-      </li-->
-      <li class="layui-nav-item">
-        <a href="https://github.com/yourkevin/NiterForum/" target="_blank"><i class="layui-icon">&#xe635;</i>源码</a>
-        <dl class="layui-nav-child">
-          <dd><a target="_blank" href="https://gitee.com/yourkevin/NiterForum/"><i><img src="/images/gitee120c.png" style="height: 28px"></i>Gitee</a></dd>
-          <dd><a target="_blank" href="https://github.com/yourkevin/NiterForum/"><i><img src="/images/github120c.png" style="height: 28px"></i>Github</a></dd>
-          <dd><a target="_blank" href="/doc.html"><i class="layui-icon" style="font-size: 30px; color: #42a0ff;">&#xe655;</i>API文档</a></dd>
-          <dd><a target="_blank" href="https://api-1251590924.cos.ap-nanjing.myqcloud.com/qrcode/index.html"><i class="layui-icon" style="font-size: 30px; color: #ffdd11;">&#xe65e;</i>打赏</a></dd>
-        </dl>
-      </li>
-      <!--li class="layui-nav-item">
-        <a th:href="${@environment.getProperty('site.info.contactQunUrl')}" target="_blank"><i class="layui-icon">&#xe770;</i>联系</a>
-      </li-->
+
     </ul>
 
     <ul class="layui-nav fly-nav-user">
@@ -113,16 +99,28 @@
           <!--i class="layui-badge fly-badge-vip layui-bg-gray layui-hide-xs" th:text="${@environment.getProperty('user.group.r'+session.userAccount.groupId)}"></i-->
           <img th:src="${loginUser.avatarUrl}">
         </a>
-        <dl class="layui-nav-child">
-          <dd><a href="/user/message" class="user-message-menu"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
-          <dd><a th:href="${'/user/'+loginUser.id}"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
-          <hr style="margin: 5px 0;">
-          <dd><a href="/user/p/myPosts"><i class="layui-icon">&#xe62a;</i>帖子管理</a></dd>
-          <dd><a href="/user/set/account"><i class="layui-icon">&#xe612;</i>账户中心</a></dd>
-          <dd><a href="/user/set/info"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
-          <hr style="margin: 5px 0;">
-          <dd><a href="/logout" style="text-align: center;"><i class="layui-icon">&#x1006;</i>退出登录</a></dd>
-        </dl>
+        <th:block th:if="${loginUser.groupId!=21}">
+          <dl class="layui-nav-child">
+            <dd><a href="/user/message" class="user-message-menu"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
+            <dd><a th:href="${'/user/'+loginUser.id}"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
+            <hr style="margin: 5px 0;">
+            <dd><a href="/user/p/myPosts"><i class="layui-icon">&#xe62a;</i>帖子管理</a></dd>
+            <dd><a href="/user/set/account"><i class="layui-icon">&#xe612;</i>账户中心</a></dd>
+            <dd><a href="/user/set/info"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+            <hr style="margin: 5px 0;">
+            <dd><a href="/logout" style="text-align: center;"><i class="layui-icon">&#x1006;</i>退出登录</a></dd>
+          </dl>
+        </th:block>
+        <th:block th:if="${loginUser.groupId==21}">
+          <dl class="layui-nav-child">
+            <dd><a href="/user/p/myPosts"><i class="layui-icon">&#xe62a;</i>帖子管理</a></dd>
+            <dd><a href="/user/set/account"><i class="layui-icon">&#xe612;</i>注册审核</a></dd>
+            <dd><a href="/user/set/info"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+            <hr style="margin: 5px 0;">
+            <dd><a href="/logout" style="text-align: center;"><i class="layui-icon">&#x1006;</i>退出登录</a></dd>
+          </dl>
+        </th:block>
+
       </li>
         </th:block>
 
@@ -202,10 +200,10 @@
 
     <div class="fly-column-right layui-hide-xs">
       <span class="fly-search"><i class="layui-icon"></i></span>
-      <a href="/p/publish" target="_blank" class="layui-btn">发表新帖</a>
+      <a href="/p/publish" target="_blank" class="layui-btn">发布新项目</a>
     </div>
     <!--div class="layui-hide-sm layui-show-xs-block" style="margin-top: -10px; padding-bottom: 10px; text-align: center;">
-      <a href="/p/publish" target="_blank" class="layui-btn">发表新帖</a>
+      <a href="/p/publish" target="_blank" class="layui-btn">发布新项目</a>
     </div-->
   </div>
 </div>
@@ -233,10 +231,10 @@
 
     <!--div class="fly-column-right layui-hide-xs">
       <span class="fly-search"><i class="layui-icon"></i></span>
-      <a href="/p/publish" target="_blank" class="layui-btn">发表新帖</a>
+      <a href="/p/publish" target="_blank" class="layui-btn">发布新项目</a>
     </div>
     <div class="layui-hide-sm layui-show-xs-block" style="margin-top: -10px; padding-bottom: 10px; text-align: center;">
-      <a href="/p/publish" target="_blank" class="layui-btn">发表新帖</a>
+      <a href="/p/publish" target="_blank" class="layui-btn">发布新项目</a>
     </div-->
   </div>
 </div>

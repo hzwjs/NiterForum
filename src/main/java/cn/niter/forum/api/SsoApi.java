@@ -93,15 +93,17 @@ public class SsoApi {
         return userService.updateUserMailById(id, mail);
     }
 
-    @ResponseBody//@ResponseBody返回json格式的数据
+    @ResponseBody
     @RequestMapping(value = "/mail/registerOrLoginWithMail", method = RequestMethod.POST)
     public Object registerOrLoginWithMail(
             @RequestParam("mail") String mail,
             @RequestParam("code") String code,
             @RequestParam(name = "password", required = false) String password,
             HttpServletResponse response) {
-        if (!code.equals(temporaryCache.getMailCode(mail)))
-            return ResultDTO.errorOf("验证码不匹配，可能已经超过5分钟，请重试");
+        // 屏蔽验证码校验
+//        if (!code.equals(temporaryCache.getMailCode(mail)))
+//            return ResultDTO.errorOf("验证码不匹配，可能已经超过5分钟，请重试");
+
         if("null".equals(password)) password=null;
         ResultDTO resultDTO = (ResultDTO)userService.registerOrLoginWithMail(mail,password);
         if(200==resultDTO.getCode()){

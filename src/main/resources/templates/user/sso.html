@@ -46,13 +46,13 @@
                                     <input type="text" id="mail" name="mail" required lay-verify="email" autocomplete="off" class="layui-input" placeholder="请输入您的邮箱号">
                                 </div>
                             </div>
-                            <div class="layui-form-item">
-                                <label for="verifyCode" class="layui-form-label">验证码</label>
-                                <div class="layui-input-inline">
-                                    <input type="text" id="verifyCode" name="verifyCode" required lay-verify="required" autocomplete="off" class="layui-input" placeholder="请先点击下方人机验证">
-                                </div>
-                                <button type="submit" class="layui-btn" id="btnSendCode" name="btnSendCode" onclick="getCode()">获取验证码</button>
-                            </div>
+<!--                            <div class="layui-form-item">-->
+<!--                                <label for="verifyCode" class="layui-form-label">验证码</label>-->
+<!--                                <div class="layui-input-inline">-->
+<!--                                    <input type="text" id="verifyCode" name="verifyCode" required lay-verify="required" autocomplete="off" class="layui-input" placeholder="请先点击下方人机验证">-->
+<!--                                </div>-->
+<!--                                <button type="submit" class="layui-btn" id="btnSendCode" name="btnSendCode" onclick="getCode()">获取验证码</button>-->
+<!--                            </div>-->
                     </div>
                 </div>
                 <div class="layui-tab-item " th:if="${0!=smsEnable}">
@@ -72,18 +72,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="layui-form-item">
-                    <div id="bindBtn" style="width: 100px;height: 36px;">
-                        <div class="vaptcha-init-main">
-                            <div class="vaptcha-init-loading">
-                                <a href="/" target="_blank">
-                                    <img src="https://r.vaptcha.com/public/img/vaptcha-loading.gif" />
-                                </a>
-                                <span class="vaptcha-text">Vaptcha启动中...</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<!--                <div class="layui-form-item">-->
+<!--                    <div id="bindBtn" style="width: 100px;height: 36px;">-->
+<!--                        <div class="vaptcha-init-main">-->
+<!--                            <div class="vaptcha-init-loading">-->
+<!--                                <a href="/" target="_blank">-->
+<!--                                    <img src="https://r.vaptcha.com/public/img/vaptcha-loading.gif" />-->
+<!--                                </a>-->
+<!--                                <span class="vaptcha-text">Vaptcha启动中...</span>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
                 <div th:if="${section=='register'}" class="layui-form-item layui-form layui-form-pane">
                     <div class="layui-form-item">
                         <label for="pass" class="layui-form-label">设置密码</label>
@@ -366,6 +366,7 @@
         ossType=a;
     }
     function login() {
+        token = "跳过验证";
         if(token == '') {
             swal({
                 title: "哎哟...",
@@ -537,7 +538,8 @@
     }
 
     function registerOrLoginWithMail(){
-        var verifyCode = $("#verifyCode").val();
+        // var verifyCode = $("#verifyCode").val();
+        verifyCode = "1111";
         var mail = $("#mail").val();
         var pass = $("#pass").val();
         var repass = $("#repass").val();
