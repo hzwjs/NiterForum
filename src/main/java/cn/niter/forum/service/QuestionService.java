@@ -94,8 +94,6 @@ public class QuestionService {
                     .collect(Collectors.joining("|"));
         }
 
-
-        //
         Integer totalPage;
         QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
         questionQueryDTO.setSearch(search);
@@ -104,8 +102,6 @@ public class QuestionService {
             tag = tag.replace("+", "").replace("*", "").replace("?", "");
             questionQueryDTO.setTag(tag);
         }
-
-      //  ColumnEnum columnEnum = ColumnEnum.
 
         for (SortEnum sortEnum : SortEnum.values()) {
             if (sortEnum.name().toLowerCase(Locale.ENGLISH).equals(sort)) {
@@ -120,7 +116,6 @@ public class QuestionService {
                 break;
             }
         }
-
 
         Integer totalCount = questionExtMapper.countBySearch(questionQueryDTO);
         if (totalCount % size == 0) {
@@ -307,8 +302,6 @@ public class QuestionService {
                     .filter(StringUtils::isNotBlank)
                     .collect(Collectors.joining("|"));
         }
-        //
-      //  Integer totalPage;
         QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
         if(column2!=null) questionQueryDTO.setColumn2(column2);
         questionQueryDTO.setSearch(search);
@@ -317,8 +310,6 @@ public class QuestionService {
             tag = tag.replace("+", "").replace("*", "").replace("?", "");
             questionQueryDTO.setTag(tag);
         }
-
-
         for (SortEnum sortEnum : SortEnum.values()) {
             if (sortEnum.name().toLowerCase(Locale.ENGLISH).equals(sort)) {
                 questionQueryDTO.setSort(sort);
@@ -335,7 +326,6 @@ public class QuestionService {
 
         List<Question> questions = questionExtMapper.selectTop(questionQueryDTO);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
-      //  PaginationDTO paginationDTO = new PaginationDTO();
         for (Question question : questions) {
             User user = userMapper.selectByPrimaryKey(question.getCreator());
             UserAccountExample userAccountExample = new UserAccountExample();
@@ -462,6 +452,7 @@ public class QuestionService {
 
         Integer totalPage;
         QuestionExample questionExample = new QuestionExample();
+        if (userId != null)
         questionExample.createCriteria()
                 .andCreatorEqualTo(userId);
         Integer totalCount = (int)questionMapper.countByExample(questionExample);
@@ -502,6 +493,46 @@ public class QuestionService {
         paginationDTO.setPagination(totalPage,page);
         return paginationDTO;
 
+    }
+
+    public PaginationDTO listByAudit(Integer page, Integer size) {
+        Integer totalPage;
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.createCriteria().andStatusEqualTo(0);
+        Integer totalCount = (int)questionMapper.countByExample(questionExample);
+        if (totalCount % size == 0) {
+            totalPage = totalCount / size;
+        } else {
+            totalPage = totalCount / size + 1;
+        }
+        if (page > totalPage) {
+            page = totalPage;
+        }
+        if (page < 1) {
+            page = 1;
+        }
+        Integer offset = size * (page-1);
+        QuestionExample example = new QuestionExample();
+        example.createCriteria()
+                .andStatusEqualTo(0);
+        example.setOrderByClause("gmt_modified desc");
+        List<Question> questions = questionMapper.selectByExampleWithRowbounds(example, new RowBounds(offset, size));
+        List<QuestionDTO> questionDTOList = new ArrayList<>();
+        PaginationDTO paginationDTO = new PaginationDTO();
+        for (Question question : questions) {
+            User user = userMapper.selectByPrimaryKey(question.getCreator());
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(question,questionDTO);
+            UserDTO userDTO = new UserDTO();
+            BeanUtils.copyProperties(user,userDTO);
+            questionDTO.setUser(userDTO);
+            questionDTO.setGmtModifiedStr(timeUtils.getTime(questionDTO.getGmtModified(),null));
+            questionDTOList.add(questionDTO);
+        }
+        paginationDTO.setData(questionDTOList);
+        paginationDTO.setTotalCount(totalCount);
+        paginationDTO.setPagination(totalPage,page);
+        return paginationDTO;
     }
 
     public QuestionDTO getById(Long id,Long viewUser_id) {

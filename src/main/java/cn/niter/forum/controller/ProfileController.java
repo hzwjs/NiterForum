@@ -73,15 +73,20 @@ public class ProfileController {
                     @RequestParam(name = "size",defaultValue = "10")Integer size){
         UserDTO user = (UserDTO)request.getAttribute("loginUser");
 
-       /* if(user==null){
-            throw new CustomizeException(CustomizeErrorCode.NO_LOGIN);
-        }*/
         if("myPosts".equals(action)){
             model.addAttribute("section", "myPosts");
             model.addAttribute("sectionName", "我的帖子");
-            PaginationDTO pagination = questionService.listByUserId(user.getId(), page, size);
+            PaginationDTO pagination = questionService.listByUserId(null, page, size);
             model.addAttribute("pagination",pagination);
             model.addAttribute("navtype", "communitynav");
+        }
+        if("auditPosts".equals(action)){
+            model.addAttribute("section", "auditPosts");
+            model.addAttribute("sectionName", "待审核的帖");
+            PaginationDTO pagination = questionService.listByAudit(page, size);
+            model.addAttribute("pagination",pagination);
+            model.addAttribute("navtype", "communitynav");
+            return "user/p_admin";
         }
         if("likes".equals(action)){
             PaginationDTO paginationDTO = questionService.listByExample(user.getId(), page, size,"likes");
@@ -94,44 +99,6 @@ public class ProfileController {
         return "user/p";
     }
 
-/*
-    @GetMapping("/profile/{action}")
-    public String profile(HttpServletRequest request,
-                          @PathVariable(name = "action") String action,
-                          Model model,
-                          @RequestParam(name = "page",defaultValue = "1")Integer page,
-                          @RequestParam(name = "size",defaultValue = "5")Integer size){
-        UserDTO user = (UserDTO)request.getAttribute("loginUser");
-
-        if(user==null){
-            throw new CustomizeException(CustomizeErrorCode.NO_LOGIN);
-        }
-
-        if("questions".equals(action)){
-            model.addAttribute("section", "questions");
-            model.addAttribute("sectionName", "我的提问");
-            PaginationDTO pagination = questionService.listByUserId(user.getId(), page, size);
-            model.addAttribute("pagination",pagination);
-            model.addAttribute("navtype", "communitynav");
-        }
-        if("notifies".equals(action)){
-            PaginationDTO paginationDTO = notificationService.list(user.getId(), page, size);
-            model.addAttribute("section", "notifies");
-            model.addAttribute("pagination", paginationDTO);
-            model.addAttribute("sectionName", "最新通知");
-            model.addAttribute("navtype", "notifynav");
-        }
-       if("likes".equals(action)){
-            PaginationDTO paginationDTO = questionService.listByExample(user.getId(), page, size,"likes");
-            model.addAttribute("section", "likes");
-            model.addAttribute("pagination", paginationDTO);
-            model.addAttribute("sectionName", "我的收藏");
-            model.addAttribute("navtype", "communitynav");
-        }
-
-        return "profile";
-    }
-*/
     @UserLoginToken
     @GetMapping("/user/set/{action}")
     public String getSetPage(HttpServletRequest request,

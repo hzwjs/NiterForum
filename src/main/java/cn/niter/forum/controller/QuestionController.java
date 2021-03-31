@@ -90,6 +90,38 @@ public class QuestionController {
         return "p/detail";
     }
 
+    @GetMapping(value = {"/p/admin/{id}","/article/admin/{id}"})
+    public String po2(@PathVariable(name = "id") Long id, HttpServletRequest request,Model model,
+                      @RequestParam(name = "to",required = false)String to){
+        UserDTO viewUser = (UserDTO)request.getAttribute("loginUser");
+        Long viewUser_id;
+        if(viewUser==null){
+            viewUser_id=0L;
+        }
+        else viewUser_id=viewUser.getId();
+        QuestionDTO questionDTO = questionService.getById(id,viewUser_id);
+
+        List<QuestionDTO> relatedQuestions = questionService.selectRelated(questionDTO);
+        List<CommentDTO> comments = commentService.listByTargetId(id, CommentTypeEnum.QUESTION);
+        //累加阅读数
+        questionService.incView(id);
+        //这里提取简短描述
+        String description=questionDTO.getDescription();
+        String textDescription = description.replaceAll("</?[^>]+>", ""); //剔出<html>的标签
+        textDescription = textDescription.replaceAll("<a>\\s*|\t|\r|\n</a>", "");//去除字符串中的空格,回车,换行符,制表符
+        textDescription = textDescription.replaceAll("&nbsp;", "");//去除&nbsp;
+        if(textDescription.length()>100) textDescription=textDescription.substring(0,100);
+        //System.out.println(textDescription);
+        model.addAttribute("textDescription", questionDTO.getTitle()+".."+textDescription);
+        model.addAttribute("question", questionDTO);
+        model.addAttribute("comments", comments);
+        model.addAttribute("relatedQuestions", relatedQuestions);
+        model.addAttribute("navtype", "communitynav");
+        model.addAttribute("vaptcha_vid", vaptcha_vid);
+        if("article".equals(to)) return "home/detail";
+        return "p/detail_admin";
+    }
+
     @PostMapping("/p/del/id")
     @ResponseBody
     public Map<String,Object> delQuestionById(HttpServletRequest request,
@@ -163,6 +195,10 @@ public class QuestionController {
             map.put("code",500);
             map.put("msg","您无权进行此操作！");
             return map;
+        }
+        if("approved".equals(field)){
+            if (rank==1)question.setStatus(4);
+            if (rank==0)question.setStatus(0);
         }
         if("stick".equals(field)){
             if(rank==1) question.setStatus(question.getStatus()|2);

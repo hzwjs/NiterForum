@@ -35,8 +35,8 @@
     </th:block>
 
     <th:block th:if="${loginUser.groupId==21}">
-        <li th:class="${section=='myPosts'||section=='likes'}?'layui-nav-item layui-this':'layui-nav-item'">
-            <a href="/user/p/myPosts">
+        <li th:class="${section=='auditPosts'||section=='likes'}?'layui-nav-item layui-this':'layui-nav-item'">
+            <a href="/user/p/auditPosts">
                 <i class="layui-icon">&#xe62a;</i>
                 帖子管理
             </a>
@@ -61,7 +61,7 @@
 
     <div class="fly-panel">
         <div class="fly-panel-title">
-            热门话题
+            热门项目
         </div>
         <div class="fly-panel-main">
             <a th:each="tag : ${tags}" th:href="@{/forum/(page=1,search=${search},tag=${tag},sort=${sort})}"

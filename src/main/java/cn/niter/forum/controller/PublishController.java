@@ -67,13 +67,6 @@ public class PublishController {
         model.addAttribute("navtype", "publishnav");
         model.addAttribute("permission", permission);
         UserDTO user = (UserDTO)request.getAttribute("loginUser");
-        //UserAccount userAccount = (UserAccount)request.getSession().getAttribute("userAccount");
-
-      /*  if(user==null) {
-            model.addAttribute("error","用户未登陆");
-            model.addAttribute("description", description);
-            return "p/add";
-        }*/
 
         if (StringUtils.isBlank(title)) {
             model.addAttribute("error", "标题不能为空");
@@ -87,19 +80,13 @@ public class PublishController {
             model.addAttribute("error", "标签不能为空");
             return "p/add";
         }
-        //审核
-        ResultDTO resultDTO = baiduCloudProvider.getTextCensorReult(questionService.getTextDescriptionFromHtml(title+description+tag));
-        if(resultDTO.getCode()!=1){
-            model.addAttribute("error",resultDTO.getMessage());
-            model.addAttribute("description", description);
-            return "p/add";
-        }
-//如果无需限制标签规范或者允许用户自定义标签，那么删掉下面这段代码就可以了
-      /*  String invalid = TagCache.filterInvalid(tag);
-        if (StringUtils.isNotBlank(invalid)) {
-            model.addAttribute("error", "输入非法标签:" + invalid);
-            return "p/publish";
-        }*/
+//        //审核
+//        ResultDTO resultDTO = baiduCloudProvider.getTextCensorReult(questionService.getTextDescriptionFromHtml(title+description+tag));
+//        if(resultDTO.getCode()!=1){
+//            model.addAttribute("error",resultDTO.getMessage());
+//            model.addAttribute("description", description);
+//            return "p/add";
+//        }
 
         Question question = new Question();
         question.setPermission(permission);
@@ -109,9 +96,7 @@ public class PublishController {
         question.setTag(tag);
         question.setCreator(user.getId());
         question.setId(id);
-        //question.setGmtCreate(System.currentTimeMillis());
-        //question.setGmtModified(question.getGmtCreate());
-        // questionMapper.creat(question);
+        question.setStatus(0); // 待审批状态
         questionService.createOrUpdate(question,user);
         return "redirect:/forum";
     }
